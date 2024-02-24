@@ -13,7 +13,7 @@ namespace CustomerWebapp.Services
         public Task<int> TotalCustomers();
     }
 
-    public class CustomerService : ICustomerService
+    internal class CustomerService : ICustomerService
     {
         private readonly IHttpService _httpService;
         private readonly ICacheService _cacheService;

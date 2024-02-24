@@ -3,14 +3,14 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
 
-public interface IHttpService : IDisposable
+internal interface IHttpService : IDisposable
 {
     Task<T> GetAsync<T>(string url);
     Task<TReturn> PostAsync<T, TReturn>(string url, T content);
     Task<TReturn> DeleteAsync<T, TReturn>(string url);
 }
 
-public class HttpService : IHttpService
+internal class HttpService : IHttpService
 {
     private readonly HttpClient _httpClient;
 

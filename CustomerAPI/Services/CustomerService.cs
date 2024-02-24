@@ -12,7 +12,7 @@ namespace CustomerAPI.Services
         public Task<int> TotalCustomers { get; }
     }
 
-    public class CustomerService : ICustomerService
+    internal class CustomerService : ICustomerService
     {
 
         public Task<List<Customer>> GetAll()

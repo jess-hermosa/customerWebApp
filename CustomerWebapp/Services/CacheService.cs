@@ -2,13 +2,13 @@
 
 namespace CustomerWebapp.Services
 {
-    public interface ICacheService
+    internal interface ICacheService
     {
         Task<T> GetOrSetAsync<T>(string key, Func<Task<T>> valueFactory);
         void Update<T>(string key, T value);
     }
 
-    public class CacheService : ICacheService
+    internal class CacheService : ICacheService
     {
         private readonly IMemoryCache _memoryCache;
 

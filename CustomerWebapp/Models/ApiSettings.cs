@@ -1,6 +1,6 @@
 ﻿namespace CustomerWebapp.Models
 {
-    public class ApiSettings
+    internal class ApiSettings
     {
         public string BaseUrl { get; set; }
         public string Endpoint { get; set; }
