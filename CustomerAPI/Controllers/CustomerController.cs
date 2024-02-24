@@ -18,37 +18,77 @@ namespace CustomerAPI.Controllers
 
         // GET: api/<CustomerController>
         [HttpGet]
-        public async Task<List<Customer>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _customerService.GetAll();
+            try
+            {
+                var result = await _customerService.GetAll();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<CustomerController>/5
         [HttpGet("{id}")]
-        public async Task<Customer> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return await _customerService.Get(id);
+            try
+            {
+                var result = await _customerService.Get(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<CustomerController>
         [HttpPost]
-        public void Post([FromBody] Customer customer)
+        public async Task<IActionResult> Post([FromBody] Customer customer)
         {
-            _customerService.AddCustomer(customer);
+            try
+            {
+                var result = await _customerService.AddCustomer(customer);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<CustomerController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Customer customer)
+        public async Task<IActionResult> Put(int id, [FromBody] Customer customer)
         {
-            _customerService.UpdateCustomer(customer);
+            try
+            {
+                var result = await _customerService.UpdateCustomer(customer);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<CustomerController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _customerService.DeleteCustomer(id);
+            try
+            {
+                var result = await _customerService.DeleteCustomer(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

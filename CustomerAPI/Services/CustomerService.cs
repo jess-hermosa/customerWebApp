@@ -6,9 +6,9 @@ namespace CustomerAPI.Services
     {
         public Task<List<Customer>> GetAll();
         public Task<Customer> Get(int id);
-        public void AddCustomer(Customer customer);
-        public void UpdateCustomer(Customer customer);
-        public void DeleteCustomer(int id);
+        public Task<List<Customer>> AddCustomer(Customer customer);
+        public Task<List<Customer>> UpdateCustomer(Customer customer);
+        public Task<List<Customer>> DeleteCustomer(int id);
         public Task<int> TotalCustomers { get; }
     }
 
@@ -33,18 +33,21 @@ namespace CustomerAPI.Services
             }
         }
 
-        public void AddCustomer(Customer customer)
+        public Task<List<Customer>> AddCustomer(Customer customer)
         {
             customer.Id = Customers.Count + 1;
             Customers.Add(customer);
+
+            return Task.FromResult(Customers);
         }
 
-        public void UpdateCustomer(Customer customer)
+        public Task<List<Customer>> UpdateCustomer(Customer customer)
         {
             var existingCustomerIndex = Customers.FindIndex(i => i.Id == customer.Id);
             if (existingCustomerIndex != -1)
             {
                 Customers[existingCustomerIndex] = customer;
+                return Task.FromResult(Customers);
             }
             else
             {
@@ -52,12 +55,13 @@ namespace CustomerAPI.Services
             }
         }
 
-        public void DeleteCustomer(int id)
+        public Task<List<Customer>> DeleteCustomer(int id)
         {
             var customerToRemove = Customers.FirstOrDefault(customer => customer.Id == id);
             if (customerToRemove != null)
             {
                 Customers.Remove(customerToRemove);
+                return Task.FromResult(Customers);
             }
             else
             {
