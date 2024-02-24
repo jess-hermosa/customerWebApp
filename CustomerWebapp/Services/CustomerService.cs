@@ -17,7 +17,6 @@ namespace CustomerWebapp.Services
     {
         private readonly IHttpService _httpService;
         private string Url;
-        private string CacheKey = "customersKey";
 
         public CustomerService(IHttpService httpService,
             IOptions<ApiSettings> apiSettings)
