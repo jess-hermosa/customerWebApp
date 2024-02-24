@@ -17,7 +17,7 @@ namespace CustomerWebapp.Services
         private readonly IHttpService _httpService;
         private readonly ICacheService _cacheService;
         private const string BaseUrl = "https://localhost:7126";
-        private const string Endpoint = "/api/customer";
+        private const string Endpoint = "api/customer";
         private string Url;
         private string CacheKey = "customersKey";
 
