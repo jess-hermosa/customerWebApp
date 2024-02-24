@@ -4,23 +4,28 @@ namespace CustomerAPI.Services
 {
     public interface ICustomerService
     {
-        public Task<List<Customer>> GetAll();
-        public Task<Customer> Get(int id);
-        public Task<List<Customer>> AddCustomer(Customer customer);
-        public Task<List<Customer>> UpdateCustomer(Customer customer);
-        public Task<List<Customer>> DeleteCustomer(int id);
+        public Task<List<Customer>> GetPaginated(int page, int pageSize);
+        public Task<Customer> Get(Guid id);
+        public void AddCustomer(Customer customer);
+        public void UpdateCustomer(Customer customer);
+        public void DeleteCustomer(Guid id);
         public Task<int> TotalCustomers { get; }
     }
 
     internal class CustomerService : ICustomerService
     {
 
-        public Task<List<Customer>> GetAll()
+        public Task<List<Customer>> GetPaginated(int page, int pageSize)
         {
-            return Task.FromResult(Customers);
+            var paginatedCustomer = Customers
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Task.FromResult(paginatedCustomer);
         }
 
-        public Task<Customer> Get(int id)
+        public Task<Customer> Get(Guid id)
         {
             var existingCustomer = Customers.FirstOrDefault(i => i.Id == id);
             if (existingCustomer != null)
@@ -33,39 +38,42 @@ namespace CustomerAPI.Services
             }
         }
 
-        public Task<List<Customer>> AddCustomer(Customer customer)
+        public void AddCustomer(Customer customer)
         {
-            customer.Id = Customers.Count + 1;
-            Customers.Add(customer);
-
-            return Task.FromResult(Customers);
+            try
+            {
+                customer.Id = Guid.NewGuid();
+                Customers.Add(customer);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<List<Customer>> UpdateCustomer(Customer customer)
+        public void UpdateCustomer(Customer customer)
         {
             var existingCustomerIndex = Customers.FindIndex(i => i.Id == customer.Id);
             if (existingCustomerIndex != -1)
             {
                 Customers[existingCustomerIndex] = customer;
-                return Task.FromResult(Customers);
             }
             else
             {
-                throw new ArgumentException("Customer not found");
+                throw new Exception("Customer not found");
             }
         }
 
-        public Task<List<Customer>> DeleteCustomer(int id)
+        public void DeleteCustomer(Guid id)
         {
             var customerToRemove = Customers.FirstOrDefault(customer => customer.Id == id);
             if (customerToRemove != null)
             {
                 Customers.Remove(customerToRemove);
-                return Task.FromResult(Customers);
             }
             else
             {
-                throw new ArgumentException("Customer not found");
+                throw new Exception("Customer not found");
             }
         }
 
@@ -75,7 +83,7 @@ namespace CustomerAPI.Services
         {
             new Customer
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Firstname = "Merritt",
                 Lastname = "Alvarez",
                 Address = "632-5477 Lectus Street",
@@ -88,7 +96,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 2,
+                Id = Guid.NewGuid(),
                 Firstname = "Phoebe",
                 Lastname = "Franklin",
                 Address = "749-2192 Vestibulum, St.",
@@ -101,7 +109,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 3,
+                Id = Guid.NewGuid(),
                 Firstname = "Ella",
                 Lastname = "Short",
                 Address = "Ap #538-2254 Vitae, Street",
@@ -114,7 +122,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 4,
+                Id = Guid.NewGuid(),
                 Firstname = "Caleb",
                 Lastname = "Vincent",
                 Address = "Ap #245-4260 Nec, Rd.",
@@ -127,7 +135,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 5,
+                Id = Guid.NewGuid(),
                 Firstname = "Kiayada",
                 Lastname = "Summers",
                 Address = "504-5663 Urna. St.",
@@ -140,7 +148,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 6,
+                Id = Guid.NewGuid(),
                 Firstname = "Nathaniel",
                 Lastname = "Bush",
                 Address = "P.O. Box 341, 6120 Egestas. Road",
@@ -153,7 +161,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 7,
+                Id = Guid.NewGuid(),
                 Firstname = "Anne",
                 Lastname = "Kelly",
                 Address = "P.O. Box 237, 3297 Nulla Avenue",
@@ -166,7 +174,7 @@ namespace CustomerAPI.Services
             },
             new Customer
             {
-                Id = 8,
+                Id = Guid.NewGuid(),
                 Firstname = "Dawn",
                 Lastname = "Christensen",
                 Address = "P.O. Box 434, 2349 Justo St.",

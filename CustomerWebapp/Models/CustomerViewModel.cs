@@ -4,7 +4,7 @@ namespace CustomerWebapp.Models
 {
     public class CustomerViewModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public string Firstname { get; set; }
         [Required]

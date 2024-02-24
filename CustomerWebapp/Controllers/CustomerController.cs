@@ -47,7 +47,7 @@ namespace CustomerWebapp.Controllers
         }
 
         // GET: CustomerController/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
             var customer = await _customerService.Get(id);
             return View(customer);
@@ -70,7 +70,7 @@ namespace CustomerWebapp.Controllers
         }
 
         // GET: CustomerController/Delete/5
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             var customer = await _customerService.Get(id);
             return View(customer);
@@ -79,7 +79,7 @@ namespace CustomerWebapp.Controllers
         // POST: CustomerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, CustomerViewModel customer)
+        public ActionResult Delete(Guid id, CustomerViewModel customer)
         {
             try
             {

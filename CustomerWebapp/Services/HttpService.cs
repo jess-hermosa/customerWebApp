@@ -6,8 +6,8 @@ using System.Text;
 internal interface IHttpService : IDisposable
 {
     Task<T> GetAsync<T>(string url);
-    Task<TReturn> PostAsync<T, TReturn>(string url, T content);
-    Task<TReturn> DeleteAsync<T, TReturn>(string url);
+    Task<bool> PostAsync<T>(string url, T content);
+    Task<bool> DeleteAsync(string url);
 }
 
 internal class HttpService : IHttpService
@@ -27,7 +27,7 @@ internal class HttpService : IHttpService
         return JsonConvert.DeserializeObject<T>(responseBody);
     }
 
-    public async Task<TReturn> PostAsync<T, TReturn>(string url, T content)
+    public async Task<bool> PostAsync<T>(string url, T content)
     {
         HttpContent httpContent = null;
 
@@ -41,18 +41,13 @@ internal class HttpService : IHttpService
         }
 
         HttpResponseMessage response = await _httpClient.PostAsync(url, httpContent);
-        response.EnsureSuccessStatusCode();
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<TReturn>(responseBody);
+        return response.IsSuccessStatusCode;
     }
 
-    public async Task<TReturn> DeleteAsync<T, TReturn>(string url)
+    public async Task<bool> DeleteAsync(string url)
     {
         HttpResponseMessage response = await _httpClient.DeleteAsync(url);
-
-        string responseBody = await response.Content.ReadAsStringAsync();
-        return JsonConvert.DeserializeObject<TReturn>(responseBody);
+        return response.IsSuccessStatusCode;
     }
 
     private static void StreamJsonSerializer(object value, Stream stream)

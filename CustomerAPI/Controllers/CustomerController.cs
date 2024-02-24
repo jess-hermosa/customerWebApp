@@ -18,11 +18,11 @@ namespace CustomerAPI.Controllers
 
         // GET: api/<CustomerController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int page, int pageSize)
         {
             try
             {
-                var result = await _customerService.GetAll();
+                var result = await _customerService.GetPaginated(page, pageSize);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -33,7 +33,7 @@ namespace CustomerAPI.Controllers
 
         // GET api/<CustomerController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
@@ -46,14 +46,30 @@ namespace CustomerAPI.Controllers
             }
         }
 
-        // POST api/<CustomerController>
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Customer customer)
+
+        // GET api/<CustomerController>/gettotalcustomers
+        [HttpGet("gettotalcustomers")]
+        public async Task<IActionResult> GetTotalCustomers()
         {
             try
             {
-                var result = await _customerService.AddCustomer(customer);
+                var result = await _customerService.TotalCustomers;
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // POST api/<CustomerController>
+        [HttpPost]
+        public IActionResult Post([FromBody] Customer customer)
+        {
+            try
+            {
+                _customerService.AddCustomer(customer);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -63,12 +79,12 @@ namespace CustomerAPI.Controllers
 
         // PUT api/<CustomerController>/5
         [HttpPost("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Customer customer)
+        public IActionResult Put(Guid id, [FromBody] Customer customer)
         {
             try
             {
-                var result = await _customerService.UpdateCustomer(customer);
-                return Ok(result);
+                _customerService.UpdateCustomer(customer);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -78,12 +94,12 @@ namespace CustomerAPI.Controllers
 
         // DELETE api/<CustomerController>/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             try
             {
-                var result = await _customerService.DeleteCustomer(id);
-                return Ok(result);
+                _customerService.DeleteCustomer(id);
+                return Ok();
             }
             catch (Exception ex)
             {
