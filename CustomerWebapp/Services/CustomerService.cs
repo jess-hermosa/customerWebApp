@@ -29,9 +29,16 @@ namespace CustomerWebapp.Services
 
         public async Task<List<CustomerViewModel>> GetPaginated(int page, int pageSize)
         {
-            var customers = await _httpService.GetAsync<IEnumerable<CustomerViewModel>>($"{Url}?page={page}&pageSize={pageSize}");
+            try
+            {
+                var customers = await _httpService.GetAsync<IEnumerable<CustomerViewModel>>($"{Url}?page={page}&pageSize={pageSize}");
 
-            return customers.ToList();
+                return customers.ToList();
+            }
+            catch (Exception)
+            {
+                throw new HttpRequestException($"Error occured when trying to customers");
+            }
         }
 
         public async Task<CustomerViewModel> Get(Guid id)
@@ -43,7 +50,7 @@ namespace CustomerWebapp.Services
             }
             else
             {
-                throw new Exception("Customer not found");
+                throw new KeyNotFoundException("Customer not found");
             }
         }
 
@@ -52,7 +59,7 @@ namespace CustomerWebapp.Services
             var result = await _httpService.PostAsync(Url, customer);
             if (!result) 
             {
-                throw new Exception($"Error occured when trying to {nameof(AddCustomer)}");
+                throw new HttpRequestException($"Error occured when trying to {nameof(AddCustomer)}");
             }
         }
 
@@ -61,7 +68,7 @@ namespace CustomerWebapp.Services
             var result = await _httpService.PostAsync($"{Url}/{customer.Id}", customer);
             if (!result)
             {
-                throw new Exception($"Error occured when trying to {nameof(UpdateCustomer)}");
+                throw new HttpRequestException($"Error occured when trying to {nameof(UpdateCustomer)}");
             }
         }
 
@@ -70,7 +77,7 @@ namespace CustomerWebapp.Services
             var result = await _httpService.DeleteAsync($"{Url}/{id}");
             if (!result)
             {
-                throw new Exception($"Error occured when trying to {nameof(DeleteCustomer)}");
+                throw new HttpRequestException($"Error occured when trying to {nameof(DeleteCustomer)}");
             }
         }
 

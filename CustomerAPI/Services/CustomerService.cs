@@ -34,7 +34,7 @@ namespace CustomerAPI.Services
             }
             else
             {
-                throw new ArgumentException("Customer not found");
+                throw new KeyNotFoundException("Customer not found");
             }
         }
 
@@ -60,7 +60,7 @@ namespace CustomerAPI.Services
             }
             else
             {
-                throw new Exception("Customer not found");
+                throw new KeyNotFoundException("Customer not found");
             }
         }
 
@@ -73,7 +73,7 @@ namespace CustomerAPI.Services
             }
             else
             {
-                throw new Exception("Customer not found");
+                throw new KeyNotFoundException("Customer not found");
             }
         }
 
