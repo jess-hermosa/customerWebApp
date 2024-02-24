@@ -57,17 +57,41 @@ namespace CustomerWebapp.Services
 
         public async void AddCustomer(CustomerViewModel customer)
         {
-            await _httpService.PostAsync(Url, customer);
+            var result = await _httpService.PostAsync<CustomerViewModel, IEnumerable<CustomerViewModel>>(Url, customer);
+            if (result != null) 
+            {
+                _cacheService.Update(CacheKey, result);
+            }
+            else
+            {
+                throw new ArgumentException($"Error occured when trying to {nameof(AddCustomer)}");
+            }
         }
 
         public async void UpdateCustomer(CustomerViewModel customer)
         {
-            await _httpService.PostAsync($"{Url}/{customer.Id}", customer);
+            var result = await _httpService.PostAsync<CustomerViewModel, IEnumerable<CustomerViewModel>>($"{Url}/{customer.Id}", customer);
+            if (result != null)
+            {
+                _cacheService.Update(CacheKey, result);
+            }
+            else
+            {
+                throw new ArgumentException($"Error occured when trying to {nameof(AddCustomer)}");
+            }
         }
 
         public async void DeleteCustomer(int id)
         {
-            await _httpService.DeleteAsync($"{Url}/{id}");
+            var result = await _httpService.DeleteAsync<int, IEnumerable<CustomerViewModel>>($"{Url}/{id}");
+            if (result != null)
+            {
+                _cacheService.Update(CacheKey, result);
+            }
+            else
+            {
+                throw new ArgumentException($"Error occured when trying to {nameof(AddCustomer)}");
+            }
         }
 
         public async Task<int> TotalCustomers()
