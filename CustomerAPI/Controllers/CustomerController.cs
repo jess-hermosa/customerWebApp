@@ -62,7 +62,7 @@ namespace CustomerAPI.Controllers
         }
 
         // PUT api/<CustomerController>/5
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Customer customer)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using CustomerWebapp.Models;
+using Microsoft.Extensions.Options;
 
 namespace CustomerWebapp.Services
 {
@@ -16,16 +17,16 @@ namespace CustomerWebapp.Services
     {
         private readonly IHttpService _httpService;
         private readonly ICacheService _cacheService;
-        private const string BaseUrl = "https://localhost:7126";
-        private const string Endpoint = "api/customer";
         private string Url;
         private string CacheKey = "customersKey";
 
-        public CustomerService(IHttpService httpService, ICacheService cacheService)
+        public CustomerService(IHttpService httpService,
+            ICacheService cacheService,
+            IOptions<ApiSettings> apiSettings)
         {
             _httpService = httpService;
             _cacheService = cacheService;
-            Url = $"{BaseUrl}/{Endpoint}";
+            Url = $"{apiSettings.Value.BaseUrl}/{apiSettings.Value.Endpoint}";
         }
 
 
@@ -77,7 +78,7 @@ namespace CustomerWebapp.Services
             }
             else
             {
-                throw new ArgumentException($"Error occured when trying to {nameof(AddCustomer)}");
+                throw new ArgumentException($"Error occured when trying to {nameof(UpdateCustomer)}");
             }
         }
 
@@ -90,7 +91,7 @@ namespace CustomerWebapp.Services
             }
             else
             {
-                throw new ArgumentException($"Error occured when trying to {nameof(AddCustomer)}");
+                throw new ArgumentException($"Error occured when trying to {nameof(DeleteCustomer)}");
             }
         }
 
